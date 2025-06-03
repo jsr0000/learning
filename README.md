@@ -1,11 +1,11 @@
-# Mina zkApp: Learning
+# Mina zkApp: Add
 
-This template uses TypeScript.
+Just playing around with Mina. Just a simple contract deployed and then an interactions script to add one to the number.
 
-## How to build
+## How to build and run the script
 
 ```sh
-npm run build
+npm run build && node build/src/interact.js
 ```
 
 ## How to run tests
