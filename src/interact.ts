@@ -4,48 +4,39 @@ import {
   PublicKey,
   fetchAccount,
   Field,
-  Lightnet, // Using Lightnet for local testing, change if using Devnet/Mainnet
+  // Lightnet, 
   SelfProof,
 } from 'o1js';
 
-// Assuming Add.js and AddZkProgram.js are in the same directory
 import { Add } from './Add.js';
 import { AddZkProgram, AddProgramProof } from './AddZkProgram.js'; // AddProgramProof might be used for type hints if needed, but proof objects are directly generated
 import { error } from 'node:console';
 
 // --- Network Configuration ---
-// Option 1: Local Lightnet (Recommended for quick testing)
+// Local Lightnet (Recommended for quick testing)
 // const network = Mina.Network('http://localhost:8080/graphql');
 // Mina.setActiveInstance(network);
 // const fee = 100_000_000; // 0.1 MINA, reasonable for Lightnet
 
-// Option 2: Devnet
+// Devnet
 const network = Mina.Network('https://api.minascan.io/node/devnet/v1/graphql'); // User's original network
 Mina.setActiveInstance(network);
-const fee = 100_000_000; // 0.1 MINA for Devnet, might need adjustment
-
-// Option 3: Berkeley Testnet
-// const network = Mina.Network('https://proxy.berkeley.minaexplorer.com/graphql');
-// Mina.setActiveInstance(network);
-// const fee = 100_000_000; // 0.1 MINA for Berkeley
+const fee = 100_000_000; // 0.1 MINA for Devnet
 
 // --- Account Configuration ---
 // zkApp Private Key (replace with your actual zkApp private key if you need to deploy/redeploy)
 // const zkAppPrivateKey = PrivateKey.random(); // Or load from a file/env
 // const appKey = zkAppPrivateKey.toPublicKey();
 
-// Using the zkApp public key provided by the user
-const appKey = PublicKey.fromBase58('B62qifAKA81fVjn7RQwiEsjNkRJarPvYKqPwQ5hy1nfEe1GQpgenLsJ');
+const appKey = PublicKey.fromBase58('B62qj5Yromh6449YcsecUiHnWCooK5aYXrq3MTcT7cCgN8wgLgTmrx7');
 
-// Fee Payer Private Key (replace with your actual fee payer private key)
-// This account needs to have MINA on the selected network
-const accountPrivateKeyString = 'EKEBMthCzfdenAqfdcEdqoVAoFSE72NxNfkBZbyKohMxD6jxT3rv'; // User's provided private key
+
+const accountPrivateKeyString = 'EKF8kHZb1gAfnKDyL5YAWgd2yjcLNozo9GtCknfiZQUGC6AhdF8y'; // User's provided private key
 const accountPrivateKey = PrivateKey.fromBase58(accountPrivateKeyString);
 const accountPublicKey = accountPrivateKey.toPublicKey();
 
 
 async function main() {
-  // console.log('o1js version:', Mina.getSnarkyJs().version); // Good to log o1js version
   console.log(`Using zkApp at address: ${appKey.toBase58()}`);
   console.log(`Using fee payer public key: ${accountPublicKey.toBase58()}`);
 
@@ -197,10 +188,10 @@ async function main() {
       console.log('Waiting for transaction to be included in a block (this may take some time)...');
 
       // Wait for transaction to be included
-      const receipt = await sentTx.wait({ maxAttempts: 120, interval: 30000 }); // ~1 hour max wait for devnet/berkeley
+      const receipt = await sentTx.wait({ maxAttempts: 120, interval: 30000 }); // ~1 hour max wait for devnet
       console.log('Transaction included successfully!');
       console.log('Receipt status:', receipt.status);
-      console.log('Full receipt:', receipt); // For more details
+      console.log('Full receipt:', receipt); 
     } else {
       console.error('Transaction sending failed. No hash returned. Raw response:', sentTx);
     }
